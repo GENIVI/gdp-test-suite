@@ -14,7 +14,7 @@ open my $out_file, ">", "./t/TAP_report.txt"
 printf $out_file "\nReport %s\n---\n", `date +"%D"`;
 
 my @files = qw[
-		./t/get_os.pl
+		./t/environment.pl
 		./t/tap-bash-ex.sh
 	     ];
 
