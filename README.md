@@ -5,4 +5,4 @@ GENIVI releases a demonstrator platform for testing and demonstrations. This tes
 
 If you want to just download the code and try it out (caveat emptor) you can do this;
 
-    curl -L https://api.github.com/repos/GENIVI/gdp-test-suite/tarball > gdp-test.tar.gz 
+    $ curl -L https://api.github.com/repos/GENIVI/gdp-test-suite/tarball > gdp-test.tar.gz 
