@@ -18,16 +18,16 @@ class TestGeniviQemu(unittest.TestCase):
     def test_checkErrors(self):
         # tests for errors on startup
         op = check_output(baseSsh + ['dmesg',' |', 'grep', 'error', '|', 'wc', '-l'] )
-        self.assertEqual(int(op),2)
+        self.assertEqual(int(op),0)
     def test_checkQemu(self):
         # looks for a qemu architecture in the dmesg output
-        op = check_output(baseSsh + ['dmesg',' |', 'grep', 'qemu' , '|', 'wc', '-w'])
+        op = check_output(baseSsh + ['dmesg',' |', 'grep', 'qemux' , '|', 'wc', '-w'])
         self.assertEqual(int(op),7) #'Set hostname to <qemux86>.') # trim prefix
     def test_checkSystemCtl(self):
         # checks the number of active system services (is this too prescriptive?
         op = check_output(baseSsh + ['systemctl', '|', 'grep', 'active', '|', 'grep', 'inactive']) #, '|', 'grep', '362'])
         #print "<", op, ">" hmm is it really const?
-        self.assertEqual(int(op.split(None, 1)[0]), 363)
+        self.assertEqual(int(op.split(None, 1)[0]), 362)
         # '362 loaded units listed. Pass --all to see loaded but inactive units, too.')
     # and a test to timeout because it is shutdown
     
