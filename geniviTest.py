@@ -12,7 +12,8 @@ baseSsh = ['ssh', '-o', 'StrictHostKeyChecking=no', 'root@127.0.0.1', '-p', port
 
 kvmCmd = ['sudo',
           'kvm', '-kernel', dir+image, '-net', 'nic',
-          '-net', 'user,hostfwd=tcp::5555-:22', '-cpu', 'core2duo',
+          '-net', 'user,hostfwd=tcp::'+port+'-:22', # open port 5555 for ssh access
+          '-cpu', 'core2duo',
           '-hda', dir+fs, 
           '-soundhw', 'ac97', 
           '-vga', 'vmware',  '-no-reboot', '-m', '512',
@@ -21,7 +22,7 @@ kvmCmd = ['sudo',
 
 def setUpModule():
     pid = Popen(kvmCmd).pid
-    time.sleep(1) # semi random number!
+    time.sleep(2) # semi random number! need to sleep just enough for the process to wait
 
 def tearDownModule():
     call(baseSsh + ["poweroff"])
@@ -29,13 +30,15 @@ def tearDownModule():
 class TestGeniviQemu(unittest.TestCase):
     
     def test_checkErrors(self):
-        # tests for errors on startup
+        # tests for errors on startup, searching the output of dmesg for occurrences of the word error
         op = check_output(baseSsh + ['dmesg',' |', 'grep', 'error', '|', 'wc', '-l'] )
         self.assertEqual(int(op),0)
     def test_checkQemu(self):
-        # looks for a qemu architecture in the dmesg output
-        op = check_output(baseSsh + ['dmesg',' |', 'grep', 'qemux' , '|', 'wc', '-w'])
-        self.assertEqual(int(op),7) #'Set hostname to <qemux86>.') # trim prefix
+        # looks for a qemux architecture in the dmesg output
+        op = check_output(baseSsh + ['dmesg', '-t', '|', 'grep', 'qemux' , '|', 'wc', '-w'])
+        self.assertEqual(int(op),5) #'Set hostname to <qemux86>.') # trim prefix
+        #op = check_output(baseSsh + ['dmesg',' |', 'grep', 'qemux' , ' |',  'awk {print $NF}' ], shell=True)
+        #self.assertEqual(op,'<qemux86-64>.') #'Set hostname to <qemux86>.') # trim prefix
     def test_checkSystemCtl(self):
         # check weston is running
         op = check_output(baseSsh + ['systemctl', 'is-active', 'weston'])
