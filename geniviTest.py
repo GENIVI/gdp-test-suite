@@ -10,12 +10,11 @@ image='bzImage'
 port = '5555'
 baseSsh = ['ssh', '-o', 'StrictHostKeyChecking=no', 'root@127.0.0.1', '-p', port]
 
-kvmCmd = ['sudo',
+kvmCmd = [
           'kvm', '-kernel', dir+image, '-net', 'nic',
           '-net', 'user,hostfwd=tcp::'+port+'-:22', # open port 5555 for ssh access
           '-cpu', 'core2duo',
           '-hda', dir+fs, 
-          '-soundhw', 'ac97', 
           '-vga', 'vmware',  '-no-reboot', '-m', '512',
           '--append', 'vga=0 uvesafb.mode_option=640x480-32 root=/dev/hda rw mem=512M  oprofile.timer=1 -serial stdio'
           ]
@@ -45,13 +44,13 @@ class TestGeniviQemu(unittest.TestCase):
         # check weston is running
         op = check_output(baseSsh + ['systemctl', 'is-active', 'weston'])
         self.assertEqual(op, 'active\n')
-        # '362 loaded units listed. Pass --all to see loaded but inactive units, too.')
 
     def untest_checkSystemCtlActive(self):
         # checks the number of active system services (is this too prescriptive?
         op = check_output(baseSsh + ['systemctl', '|', 'grep', 'active', '|', 'grep', 'inactive']) #, '|', 'grep', '362'])
         #print "<", op, ">" hmm is it really const?
         self.assertEqual(int(op.split(None, 1)[0]), 362)
+        # '362 loaded units listed. Pass --all to see loaded but inactive units, too.')
 
     # and a test to timeout because it is shutdown?
     
