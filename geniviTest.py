@@ -33,17 +33,20 @@ class TestGeniviQemu(unittest.TestCase):
         # tests for errors on startup, searching the output of dmesg for occurrences of the word error
         op = check_output(baseSsh + ['dmesg',' |', 'grep', 'error', '|', 'wc', '-l'] )
         self.assertEqual(int(op),0)
+
     def test_checkQemu(self):
         # looks for a qemux architecture in the dmesg output
-        op = check_output(baseSsh + ['dmesg', '-t', '|', 'grep', 'qemux' , '|', 'wc', '-w'])
-        self.assertEqual(int(op),5) #'Set hostname to <qemux86>.') # trim prefix
+        op = check_output(baseSsh + ['dmesg', '-t', '|', 'grep', 'qemux'])
+        self.assertEqual(op[0:-1],'systemd[1]: Set hostname to <qemux86-64>.') # trim EOL
         #op = check_output(baseSsh + ['dmesg',' |', 'grep', 'qemux' , ' |',  'awk {print $NF}' ], shell=True)
         #self.assertEqual(op,'<qemux86-64>.') #'Set hostname to <qemux86>.') # trim prefix
+
     def test_checkSystemCtl(self):
         # check weston is running
         op = check_output(baseSsh + ['systemctl', 'is-active', 'weston'])
         self.assertEqual(op, 'active\n')
         # '362 loaded units listed. Pass --all to see loaded but inactive units, too.')
+
     def untest_checkSystemCtlActive(self):
         # checks the number of active system services (is this too prescriptive?
         op = check_output(baseSsh + ['systemctl', '|', 'grep', 'active', '|', 'grep', 'inactive']) #, '|', 'grep', '362'])
