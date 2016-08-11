@@ -22,15 +22,26 @@ kvmCmd = [
           '--append', 'vga=0 uvesafb.mode_option=640x480-32 root=/dev/hda rw mem=512M  oprofile.timer=1 -serial stdio'
           ]
 
-def setUpModule():
-    pid = Popen(kvmCmd).pid
-    time.sleep(1) # semi random number! need to sleep just enough for the process to wait
+# def setUpModule():
+#     pid = Popen(kvmCmd).pid
+#     time.sleep(4) # semi random number! need to sleep so that kvm has started and port 5555 is open
+#                   # if it is too short then ssh waits for a retry which may result in the test taking longer! 
 
-def tearDownModule():
-    call(baseSsh + ["poweroff"])
+# def tearDownModule():
+#     # should this be tearDown? maybe want to test the system is down afterwards?
+#     call(baseSsh + ["poweroff"])
+
 
 class TestGeniviQemu(unittest.TestCase):
-    
+    @classmethod
+    def setUpClass(cls):
+        pid = Popen(kvmCmd).pid
+        time.sleep(4) # semi random number! need to sleep so that kvm has started and port 5555 is open
+                  # if it is too short then ssh waits for a retry which may result in the test taking longer! 
+    @classmethod
+    def tearDownClass(cls):
+        # should this be tearDown? maybe want to test the system is down afterwards?
+        call(baseSsh + ["poweroff"])
     def test_checkErrors(self):
         # tests for errors on startup, searching the output of dmesg for occurrences of the word error
         op = check_output(baseSsh + ['dmesg',' |', 'grep', 'error', '|', 'wc', '-l'] )
@@ -48,6 +59,16 @@ class TestGeniviQemu(unittest.TestCase):
         op = check_output(baseSsh + ['systemctl', 'is-active', 'weston'])
         self.assertEqual(op, 'active\n')
 
+    # this test seems to run last so no need for a restart??
+    # and a test to timeout because it is shutdown?
+    @unittest.expectedFailure
+    def test_restart(self):
+        call(baseSsh + ["poweroff"])
+        time.sleep(4)
+        op = check_output(baseSsh, "uptime")
+        pid = Popen(kvmCmd).pid
+        time.sleep(4) # just in case something else happens?
+        
     def untest_checkSystemCtlActive(self):
         # checks the number of active system services (is this too prescriptive?
         op = check_output(baseSsh + ['systemctl', '|', 'grep', 'active', '|', 'grep', 'inactive']) #, '|', 'grep', '362'])
@@ -55,7 +76,6 @@ class TestGeniviQemu(unittest.TestCase):
         self.assertEqual(int(op.split(None, 1)[0]), 362)
         # '362 loaded units listed. Pass --all to see loaded but inactive units, too.')
 
-    # and a test to timeout because it is shutdown?
     
 
 if __name__ == '__main__':
