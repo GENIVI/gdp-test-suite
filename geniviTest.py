@@ -8,6 +8,9 @@ dir='tmp/deploy/images/qemux86-64/'
 fs='genivi-dev-platform-qemux86-64.ext4'
 image='bzImage'
 port = '5555'
+
+# Assumes that the image has been built with EXTRA_USERS_PARAMS = ""
+# If it hasn't you may need to install sshpass and edit the parameters!
 baseSsh = ['ssh', '-o', 'StrictHostKeyChecking=no', 'root@127.0.0.1', '-p', port]
 
 kvmCmd = [
@@ -21,7 +24,7 @@ kvmCmd = [
 
 def setUpModule():
     pid = Popen(kvmCmd).pid
-    time.sleep(2) # semi random number! need to sleep just enough for the process to wait
+    time.sleep(1) # semi random number! need to sleep just enough for the process to wait
 
 def tearDownModule():
     call(baseSsh + ["poweroff"])
