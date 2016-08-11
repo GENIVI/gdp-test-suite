@@ -22,26 +22,19 @@ kvmCmd = [
           '--append', 'vga=0 uvesafb.mode_option=640x480-32 root=/dev/hda rw mem=512M  oprofile.timer=1 -serial stdio'
           ]
 
-# def setUpModule():
-#     pid = Popen(kvmCmd).pid
-#     time.sleep(4) # semi random number! need to sleep so that kvm has started and port 5555 is open
-#                   # if it is too short then ssh waits for a retry which may result in the test taking longer! 
+def setUpModule():
+    pid = Popen(kvmCmd).pid
+    time.sleep(4) # semi random number! need to sleep so that kvm has started and port 5555 is open
+                  # if it is too short then ssh waits for a retry which may result in the test taking longer! 
 
-# def tearDownModule():
-#     # should this be tearDown? maybe want to test the system is down afterwards?
-#     call(baseSsh + ["poweroff"])
+def tearDownModule():
+    # should this be tearDown? maybe want to test the system is down afterwards?
+    # see test_restart
+    call(baseSsh + ["poweroff"])
 
 
 class TestGeniviQemu(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        pid = Popen(kvmCmd).pid
-        time.sleep(4) # semi random number! need to sleep so that kvm has started and port 5555 is open
-                  # if it is too short then ssh waits for a retry which may result in the test taking longer! 
-    @classmethod
-    def tearDownClass(cls):
-        # should this be tearDown? maybe want to test the system is down afterwards?
-        call(baseSsh + ["poweroff"])
+
     def test_checkErrors(self):
         # tests for errors on startup, searching the output of dmesg for occurrences of the word error
         op = check_output(baseSsh + ['dmesg',' |', 'grep', 'error', '|', 'wc', '-l'] )
@@ -57,6 +50,7 @@ class TestGeniviQemu(unittest.TestCase):
     def test_checkSystemCtl(self):
         # check weston is running
         op = check_output(baseSsh + ['systemctl', 'is-active', 'weston'])
+        # assumes Linux style EOLs
         self.assertEqual(op, 'active\n')
 
     # this test seems to run last so no need for a restart??
@@ -84,6 +78,5 @@ if __name__ == '__main__':
     gensuite = unittest.TestLoader().loadTestsFromTestCase(TestGeniviQemu)
     unittest.TextTestRunner(verbosity=2).run(gensuite)
 
-#    call(baseSsh + ["poweroff"])
 
     
