@@ -9,6 +9,7 @@ dir='tmp/deploy/images/'+arch+'/'
 fs='genivi-dev-platform-'+arch+'.ext4'
 image='bzImage'
 port = '5555'
+# end of configurable area
 
 # Assumes that the image has been built with EXTRA_USERS_PARAMS = ""
 # If it hasn't you may need to install sshpass and edit the parameters!
