@@ -22,16 +22,23 @@ kvmCmd = [
           '-vga', 'vmware',  '-no-reboot', '-m', '512',
           '--append', 'vga=0 uvesafb.mode_option=640x480-32 root=/dev/hda rw mem=512M  oprofile.timer=1 -serial stdio'
           ]
+kvm = None
 
 def setUpModule():
-    pid = Popen(kvmCmd).pid
+    global kvm
+    kvm = Popen(kvmCmd)
+    pid = kvm.pid
+    #print kvm.returncode
+    if (kvm.returncode != None):
+        assert False, "Could not start image"
     time.sleep(4) # semi random number! need to sleep so that kvm has started and port 5555 is open
-                  # if it is too short then ssh waits for a retry which may result in the test taking longer! 
+                  # if it is too short then ssh waits for a retry which may result in the test taking longer!
 
 def tearDownModule():
     # should this be tearDown? maybe want to test the system is down afterwards?
     # see test_restart
-    call(baseSsh + ["poweroff"])
+    if (kvm != None):
+        call(baseSsh + ["poweroff"])
 
 
 class TestGeniviQemu(unittest.TestCase):
@@ -40,6 +47,13 @@ class TestGeniviQemu(unittest.TestCase):
         # tests for errors on startup, searching the output of dmesg for occurrences of the word error
         op = check_output(baseSsh + ['dmesg',' |', 'grep', 'error', '|', 'wc', '-l'] )
         self.assertEqual(int(op),0)
+
+    def test_checkFails(self):
+        # tests for errors on startup, searching the output of dmesg for occurrences of the word error
+        op = check_output(baseSsh + ['dmesg',' |', 'grep', '[Ff]ailed', '|', 'wc', '-l'] )
+        # acpi PNP0A03:00: _OSC failed (AE_NOT_FOUND); disabling ASPM
+        #print '<', op, '>'
+        self.assertEqual(int(op),1)
 
     def test_checkQemu(self):
         # looks for a qemux architecture in the dmesg output
@@ -58,8 +72,10 @@ class TestGeniviQemu(unittest.TestCase):
     # and a test to timeout because it is shutdown?
     @unittest.expectedFailure
     def test_restart(self):
+        global kvm
         call(baseSsh + ["poweroff"])
         #time.sleep(2)
+        kvm = None
         op = check_output(baseSsh, "uptime")
         pid = Popen(kvmCmd).pid
         
