@@ -4,8 +4,9 @@ from subprocess import call, Popen, check_output
 import time
 
 # variables which might need changing
-dir='tmp/deploy/images/qemux86-64/'
-fs='genivi-dev-platform-qemux86-64.ext4'
+arch='qemux86-64'
+dir='tmp/deploy/images/'+arch+'/'
+fs='genivi-dev-platform-'+arch+'.ext4'
 image='bzImage'
 port = '5555'
 
@@ -58,7 +59,7 @@ class TestGeniviQemu(unittest.TestCase):
     def test_checkQemu(self):
         # looks for a qemux architecture in the dmesg output
         op = check_output(baseSsh + ['dmesg', '-t', '|', 'grep', 'qemux'])
-        self.assertEqual(op[0:-1],'systemd[1]: Set hostname to <qemux86-64>.') # trim EOL
+        self.assertEqual(op[0:-1],'systemd[1]: Set hostname to <'+arch+'>.') # trim EOL
         #op = check_output(baseSsh + ['dmesg',' |', 'grep', 'qemux' , ' |',  'awk {print $NF}' ], shell=True)
         #self.assertEqual(op,'<qemux86-64>.') #'Set hostname to <qemux86>.') # trim prefix
 
