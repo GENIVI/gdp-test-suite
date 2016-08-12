@@ -11,7 +11,8 @@ port = '5555'
 
 # Assumes that the image has been built with EXTRA_USERS_PARAMS = ""
 # If it hasn't you may need to install sshpass and edit the parameters!
-baseSsh = ['ssh', '-o', 'StrictHostKeyChecking=no', 'root@127.0.0.1', '-p', port]
+baseSsh = ['ssh', '-o', 'StrictHostKeyChecking=no', 'root@127.0.0.1', '-p', port, '-o', 'ConnectTimeout=7',
+           '-o', 'BatchMode=yes']
 
 kvmCmd = [
           'kvm', '-kernel', dir+image, '-net', 'nic',
@@ -58,10 +59,9 @@ class TestGeniviQemu(unittest.TestCase):
     @unittest.expectedFailure
     def test_restart(self):
         call(baseSsh + ["poweroff"])
-        time.sleep(4)
+        #time.sleep(2)
         op = check_output(baseSsh, "uptime")
         pid = Popen(kvmCmd).pid
-        time.sleep(4) # just in case something else happens?
         
     def untest_checkSystemCtlActive(self):
         # checks the number of active system services (is this too prescriptive?
