@@ -29,7 +29,7 @@ kvm = None
 def setUpModule():
     global kvm
     kvm = Popen(kvmCmd)
-    pid = kvm.pid
+    # pid = kvm.pid
     #print kvm.returncode
     if (kvm.returncode != None):
         assert False, "Could not start image"
@@ -38,7 +38,7 @@ def setUpModule():
 
 def tearDownModule():
     # should this be tearDown? maybe want to test the system is down afterwards?
-    # see test_restart
+    # see test_restart - if kvm = None then the image has been shutdown
     if (kvm != None):
         call(baseSsh + ["poweroff"])
 
@@ -79,7 +79,8 @@ class TestGeniviQemu(unittest.TestCase):
         #time.sleep(2)
         kvm = None
         op = check_output(baseSsh, "uptime")
-        pid = Popen(kvmCmd).pid
+        self.assertEqual(op,"") # should have error'ed on the previous line
+        self.pid = Popen(kvmCmd).pid
         
     def untest_checkSystemCtlActive(self):
         # checks the number of active system services (is this too prescriptive?
