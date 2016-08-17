@@ -24,26 +24,23 @@ kvmCmd = [
           '-vga', 'vmware',  '-no-reboot', '-m', '512',
           '--append', 'vga=0 uvesafb.mode_option=640x480-32 root=/dev/hda rw mem=512M  oprofile.timer=1 -serial stdio'
           ]
-kvm = None
-
-def setUpModule():
-    global kvm
-    kvm = Popen(kvmCmd)
-    # pid = kvm.pid
-    #print kvm.returncode
-    if (kvm.returncode != None):
-        assert False, "Could not start image"
-    time.sleep(4) # semi random number! need to sleep so that kvm has started and port 5555 is open
-                  # if it is too short then ssh waits for a retry which may result in the test taking longer!
-
-def tearDownModule():
-    # should this be tearDown? maybe want to test the system is down afterwards?
-    # see test_restart - if kvm = None then the image has been shutdown
-    if (kvm != None):
-        call(baseSsh + ["poweroff"])
 
 
 class TestGeniviQemu(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.kvm = Popen(kvmCmd)
+        # pid = kvm.pid
+        #print kvm.returncode
+        if (self.kvm.returncode != None):
+            assert False, "Could not start image"
+        time.sleep(4) # semi random number! need to sleep so that kvm has started and port 5555 is open
+                      # if it is too short then ssh waits for a retry which may result in the test taking longer!
+    @classmethod
+    def tearDownClass(self):
+        # should this be tearDown? maybe want to test the system is down afterwards?
+        if (self.kvm != None):
+            call(baseSsh + ["poweroff"])
 
     def test_checkErrors(self):
         # tests for errors on startup, searching the output of dmesg for occurrences of the word error
@@ -74,10 +71,9 @@ class TestGeniviQemu(unittest.TestCase):
     # and a test to timeout because it is shutdown?
     @unittest.expectedFailure
     def test_restart(self):
-        global kvm
         call(baseSsh + ["poweroff"])
         #time.sleep(2)
-        kvm = None
+        self.kvm = None
         op = check_output(baseSsh, "uptime")
         self.assertEqual(op,"") # should have error'ed on the previous line
         self.pid = Popen(kvmCmd).pid
