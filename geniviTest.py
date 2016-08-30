@@ -2,7 +2,7 @@
 import unittest
 from subprocess import call, Popen, check_output
 import time
-
+import os
 #
 # Assumptions
 # Script is run in gdp-src-build
@@ -11,8 +11,14 @@ import time
 
 # variables which might need changing
 arch='qemux86-64'
-dir='tmp/deploy/images/'+arch+'/'
+if  (os.environ.has_key('QEMU_IMAGE_DIR')):
+    dir = os.environ['QEMU_IMAGE_DIR'] + '/'
+else:
+    dir='tmp/deploy/images/'+arch+'/'
 fs='genivi-dev-platform-'+arch+'.ext4'
+if not os.path.isfile(dir+fs) :
+    print fs
+    raise Exception("Image file not found")
 image='bzImage'
 port = '5555'
 # end of configurable area
