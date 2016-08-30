@@ -5,23 +5,26 @@ import time
 import os
 #
 # Assumptions
-# Script is run in gdp-src-build
+# Script is run in gdp-src-build - though see QEMU_IMAGE_DIR
 # Python modules unittest, time
 #
 
 # variables which might need changing
 arch='qemux86-64'
+fs='genivi-dev-platform-'+arch+'.ext4'
+image='bzImage'
+port = '5555'
+# end of configurable area
+
+# the user can set the environment varible QEMU_IMAGE_DIR to determine
+# the directory containing the kernel/disk image
 if  (os.environ.has_key('QEMU_IMAGE_DIR')):
     dir = os.environ['QEMU_IMAGE_DIR'] + '/'
 else:
     dir='tmp/deploy/images/'+arch+'/'
-fs='genivi-dev-platform-'+arch+'.ext4'
-if not os.path.isfile(dir+fs) :
+if not os.path.isfile(dir+image) :
     print fs
     raise Exception("Image file not found")
-image='bzImage'
-port = '5555'
-# end of configurable area
 
 # Assumes that the image has been built with EXTRA_USERS_PARAMS = ""
 # If it hasn't you may need to install sshpass and edit the parameters!
