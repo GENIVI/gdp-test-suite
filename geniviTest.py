@@ -82,7 +82,6 @@ class TestGeniviQemu(unittest.TestCase):
     # A failure is expected because the image should be shutdown
     @unittest.expectedFailure
     def test_restart(self):
-        global kvm
         self.sendCommand(["poweroff"])
         #time.sleep(2)
         kvm = None
