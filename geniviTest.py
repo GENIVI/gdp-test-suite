@@ -9,6 +9,12 @@ import os
 # Python modules unittest, time
 #
 
+#
+# Assumptions
+# Script is run in gdp-src-build
+# Python modules unittest, time
+#
+
 # variables which might need changing
 arch='qemux86-64'
 fs='genivi-dev-platform-'+arch+'.ext4'
@@ -93,9 +99,10 @@ class TestGeniviQemu(unittest.TestCase):
     def test_restart(self):
         self.sendCommand(["poweroff"])
         #time.sleep(2)
-        kvm = None
+        self.kvm = None
         op = self.sendCommand("uptime")
-        pid = Popen(kvmCmd).pid
+        self.assertEqual(op,"") # should have error'ed on the previous line
+        self.pid = Popen(kvmCmd).pid
         
     def untest_checkSystemCtlActive(self):
         # This test is not run
