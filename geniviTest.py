@@ -88,6 +88,16 @@ class TestGeniviQemu(unittest.TestCase):
         op = self.sendCommand(['dmesg', '-t', '|', 'grep', 'qemux'])
         self.assertEqual(op[0:-1],'systemd[1]: Set hostname to <'+arch+'>.') # trim EOL
 
+    def test_checkPythonInstall(self):
+        # op = self.sendCommand(['qml-example'])
+        # qml-example can't yet fake a return instead copy a subset of these tests
+        # onto the image and run then on the image
+        # locally
+        # Not sure what this checks apart from the scp & the image having a working python installation!
+        call(['scp', '-o', 'StrictHostKeyChecking=no', '-P', port, 'py2ex.py', 'root@127.0.0.1:/tmp'])
+        op = self.sendCommand(['/tmp/py2ex.py'])
+        return True
+    
     def test_checkSystemCtl(self):
         # check weston is running
         op = self.sendCommand(['systemctl', 'is-active', 'weston'])
