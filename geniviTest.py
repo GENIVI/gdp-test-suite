@@ -20,6 +20,9 @@ arch='qemux86-64'
 fs='genivi-dev-platform-'+arch+'.ext4'
 image='bzImage'
 port = '5555'
+sleepBeforeTime = 6 # time to sleep to allow vm to start, too short and it may fail, make it long enough
+                    # to try to align the vm and the tests, also if short the ssh may wait to retry making
+                    # the test time longer!
 # end of configurable area
 
 # the user can set the environment varible QEMU_IMAGE_DIR to determine
@@ -55,7 +58,7 @@ class TestGeniviQemu(unittest.TestCase):
         #print kvm.returncode
         if (self.kvm.returncode != None):
             assert False, "Could not start image"
-        time.sleep(4) # semi random number! need to sleep so that kvm has started and port 5555 is open
+        time.sleep(sleepBeforeTime) # semi random number! need to sleep so that kvm has started and port 5555 is open
                       # if it is too short then ssh waits for a retry which may result in the test taking longer!
     @classmethod
     def tearDownClass(self):
@@ -88,7 +91,6 @@ class TestGeniviQemu(unittest.TestCase):
     def test_checkSystemCtl(self):
         # check weston is running
         op = self.sendCommand(['systemctl', 'is-active', 'weston'])
-        print 'got ', op
         # assumes Linux style EOLs
         self.assertEqual(op, 'active\n')
 
