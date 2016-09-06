@@ -3,6 +3,7 @@ import unittest
 from subprocess import call, Popen, check_output
 import time
 import os
+import sys
 #
 # Assumptions
 # Script is run in gdp-src-build - though see QEMU_IMAGE_DIR
@@ -89,14 +90,14 @@ class TestGeniviQemu(unittest.TestCase):
         self.assertEqual(op[0:-1],'systemd[1]: Set hostname to <'+arch+'>.') # trim EOL
 
 
-        def test_checkPythonInstall(self):
+    def test_checkPythonInstall(self):
         # op = self.sendCommand(['qml-example'])
         # qml-example can't yet fake a return instead copy a subset of these tests
         # onto the image and run then on the image
         # locally
         # Not sure what this checks apart from the scp & the image having a working python installation!
         # needs a path prefix to py2ex.py
-        scriptPath =  os.path.dirname(os.path.realpath(sys.argv[0])
+        scriptPath =  os.path.dirname(os.path.realpath(sys.argv[0]))
         call(['scp', '-o', 'StrictHostKeyChecking=no', '-P', port, scriptPath + '/py2ex.py', 'root@127.0.0.1:/tmp'])
         op = self.sendCommand(['/tmp/py2ex.py'])
         return True
