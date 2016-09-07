@@ -67,6 +67,13 @@ class TestGeniviQemu(unittest.TestCase):
         if (self.kvm != None):
             call(baseSsh + ["poweroff"])
 
+    def makeTest(self, cmd, expected):
+        """Call this function with the shell command you want running  on the image (cmd)
+        and the expected result (expected) """
+        cmdValues = cmd.split(' ')
+        result = self.sendCommand(cmdValues)
+        return (result == expected)
+    
     def sendCommand(self,cmd):
         op = check_output(baseSsh +cmd)
         return op
