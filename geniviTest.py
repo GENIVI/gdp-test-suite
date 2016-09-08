@@ -64,9 +64,11 @@ class TestGeniviQemu(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         # should this be tearDown? maybe want to test the system is down afterwards?
+        # see test_restart for a poweroff test
         if (self.kvm != None):
             call(baseSsh + ["poweroff"])
 
+    # Two helper functions        
     def makeTest(self, cmd, expected):
         """Call this function with the shell command you want running  on the image (cmd)
         and the expected result (expected) """
@@ -75,9 +77,14 @@ class TestGeniviQemu(unittest.TestCase):
         return (result == expected)
     
     def sendCommand(self,cmd):
+        """ Expects a list parameter containing the arguments of the command to be executed on the
+        target. Returns the output.
+        e.g. self.sendCommand(['df', '/tmp'])
+        """
         op = check_output(baseSsh +cmd)
         return op
-    
+
+    # The following are sample tests
     def test_checkErrors(self):
         # tests for errors on startup, searching the output of dmesg for occurrences of the word error
         op = self.sendCommand(['dmesg',' |', 'grep', 'error', '|', 'wc', '-l'] )
