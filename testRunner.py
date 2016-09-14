@@ -22,6 +22,7 @@ import geniviTest
 import unittest
 
 class testRunner(geniviTest.TestGeniviQemu):
+    # test must be called test_<testName>
     def test_rerecheckSystemCtl(self):
         # check weston is running (event)
         self.assertTrue(self.makeTest('systemctl is-active weston',
