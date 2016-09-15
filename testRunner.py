@@ -22,12 +22,14 @@
 import geniviTest 
 import unittest
 
+
 class testRunner(geniviTest.TestGeniviQemu):
     # test must be called test_<testName>
     def test_rerecheckSystemCtl(self):
         # check weston is running (event)
         self.assertTrue(self.makeTest('systemctl is-active weston',
                                       'active\n')) # Final system state and output
+
 
 if __name__ == '__main__': # Expected state & output, run test
     gensuite = unittest.TestLoader().loadTestsFromTestCase(testRunner)
