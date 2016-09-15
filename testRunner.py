@@ -1,22 +1,23 @@
 #!/usr/bin/python
 
-# How to describe the tests/behavoiurs:
+# How to describe the tests/behaviours:
 # * Define an scenario (one or two sentences)
 # * Describe the acceptance test from the business and target perspective using the terminology: Given (set up) -> When (trigger) -> Then (verify) 
 # * Description of the test as comments: Initial system state -> event (or action) -> Final system state & output -> Expected state & output 
 
 # Scenario
-# The user has shell access on image as root. Wayland is up and running and we want to ensure weston is also up and running.
+# The user has shell access on image as root. Wayland is up and running and we want to test whether weston is also up and running.
 
 # Acceptance test
 # Test to confirm that  Weston is up and running
 # Given that wayland was up and running
-# And yy was up and runing
 # When getting into the shell as root 
 # And ask the system about weston
-# Then sss is seen on the shell
+# Then 'active' is seen on the shell
 
 # Technical description
+# initial state - image is booted with an empty root password and an accessible ssh port from the host
+# final state - the current state of the weston service is checked, 'active\n' should be returned
 
 import geniviTest 
 import unittest
