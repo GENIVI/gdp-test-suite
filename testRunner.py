@@ -22,7 +22,6 @@
 import geniviTest 
 import unittest
 
-
 class testRunner(geniviTest.TestGeniviQemu):
     # test must be called test_<testName>
     def test_rerecheckSystemCtl(self):
@@ -31,6 +30,3 @@ class testRunner(geniviTest.TestGeniviQemu):
                                       'active\n')) # Final system state and output
 
 
-if __name__ == '__main__': # Expected state & output, run test
-    gensuite = unittest.TestLoader().loadTestsFromTestCase(testRunner)
-    unittest.TextTestRunner(verbosity=2).run(gensuite)
