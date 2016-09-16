@@ -3,18 +3,7 @@ import unittest
 from subprocess import call, Popen, check_output
 import time
 import os
-import sys
-#
-# Assumptions
-# Script is run in gdp-src-build - though see QEMU_IMAGE_DIR
-# Python modules unittest, time
-#
 
-#
-# Assumptions
-# Script is run in gdp-src-build
-# Python modules unittest, time
-#
 
 # variables which might need changing
 Arch='qemux86-64'
@@ -31,7 +20,9 @@ sleepBeforeTime = 6 # time to sleep to allow vm to start, too short and it may f
 if  (os.environ.has_key('QEMU_IMAGE_DIR')):
     dir = os.environ['QEMU_IMAGE_DIR'] + '/'
 else:
-    dir='tmp/deploy/images/'+arch+'/'
+    # this is probably no longer right if the script is being run from their directory?
+    dir='tmp/deploy/images/'+Arch+'/'
+
 if not os.path.isfile(dir+image) :
     print fs
     raise Exception("Image file not found - do you need to set QEMU_IMAGE_DIR?")
@@ -105,10 +96,8 @@ class TestGeniviQemu(unittest.TestCase):
     
 
 if __name__ == '__main__':
-    # start the image
-
-    gensuite = unittest.TestLoader().loadTestsFromTestCase(TestGeniviQemu)
-    unittest.TextTestRunner(verbosity=2).run(gensuite)
+    print 'This is no longer the testing top level'
+    print '    use runAllTests.py or runOneTest.py instead!'
 
 
     
