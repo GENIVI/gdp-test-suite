@@ -1,12 +1,16 @@
 #!/usr/bin/python
 
+#
+# This script is intended to be run on the image (after scp'ing it over there)
+# It checks that python is installed on the image and then that
+# dmesg is not reporting an error and that weston is running
+#
 import unittest
 from subprocess import call, Popen, check_output
 import time
 import os
 
 arch='qemux86-64'
-
 
 
 class TestGeniviQemu(unittest.TestCase):
@@ -32,7 +36,6 @@ class TestGeniviQemu(unittest.TestCase):
 
 if __name__ == '__main__':
     # start the image
-
     gensuite = unittest.TestLoader().loadTestsFromTestCase(TestGeniviQemu)
     unittest.TextTestRunner(verbosity=2).run(gensuite)
 

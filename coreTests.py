@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# These are some tests built up during the scoping out of the testing process
+# They've been left as a single module containing multiple tests
 import geniviTest 
 import unittest
 import os
@@ -31,9 +33,8 @@ class coreTests(geniviTest.TestGeniviQemu):
 
     def test_checkPythonInstall(self):
         # op = self.sendCommand(['qml-example'])
-        # qml-example can't yet fake a return instead copy a subset of these tests
-        # onto the image and run then on the image
-        # locally
+        # qml-example can't yet fake a return (so not using anything gui related) instead copy a subset of these tests
+        # onto the image and run then on the image locally
         # Not sure what this checks apart from the scp & the image having a working python installation!
         # needs a path prefix to py2ex.py
         scriptPath =  os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -54,6 +55,7 @@ class coreTests(geniviTest.TestGeniviQemu):
     def test_restart(self):
         self.sendCommand(["poweroff"])
         #time.sleep(2)
+        # Assumes that it has worked without testing that?
         self.kvm = None
         op = self.sendCommand("uptime")
         self.assertEqual(op,"") # should have error'ed on the previous line

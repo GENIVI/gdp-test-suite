@@ -15,7 +15,7 @@ import sys
 import os
 
 class gdpTestSuite(unittest.TestSuite):
-#    Testsuite, override run to handle starting and closing the image
+#    a TestSuite, override run to handle starting and closing the image
     def run(self, suite):
         geniviTest.TestGeniviQemu.poweron()
         super(gdpTestSuite,self).run(suite)

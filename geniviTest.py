@@ -4,7 +4,6 @@ from subprocess import call, Popen, check_output
 import time
 import os
 
-
 # variables which might need changing
 Arch='qemux86-64'
 fs='genivi-dev-platform-'+Arch+'.ext4'
@@ -27,18 +26,16 @@ if not os.path.isfile(dir+image) :
     print fs
     raise Exception("Image file not found - do you need to set QEMU_IMAGE_DIR?")
 
-def finalizer_function():
-    print 'run once'
-    
-# @unittest.fixture(scope="session", autouse=True)
-# def do_something(request):
-#     # prepare something ahead of all tests
-#     request.addfinalizer(finalizer_function)
-    
 # Assumes that the image has been built with EXTRA_USERS_PARAMS = ""
 # If it hasn't you may need to install sshpass and edit the parameters!
+# or now just set QEMU_USER_SSHPASS to 1
+os.environ['SSHPASS'] = 'root'    
+sshPass = ['sshpass', '-e']
+
 baseSsh = ['ssh', '-o', 'StrictHostKeyChecking=no', 'root@127.0.0.1', '-p', Port, '-o', 'ConnectTimeout=7',
            '-o', 'BatchMode=yes']
+if (os.environ.has_key('QEMU_USE_SSHPASS')):
+    baseSsh = sshPass + baseSsh
 
 kvmCmd = [
           'kvm', '-kernel', dir+image, '-net', 'nic',
@@ -60,6 +57,7 @@ class TestGeniviQemu(unittest.TestCase):
     port = 0
     @staticmethod
     def poweron():
+        # Should Arch & Port be parameters and set via the top level?
         TestGeniviQemu.kvm = Popen(kvmCmd)
         TestGeniviQemu.arch=Arch
         TestGeniviQemu.port = Port
