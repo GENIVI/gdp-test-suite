@@ -3,7 +3,6 @@ import unittest
 from subprocess import call, Popen, check_output
 import time
 import os
-import sys
 
 # variables which might need changing
 Arch='qemux86-64'
@@ -37,9 +36,7 @@ baseSsh = ['ssh', '-o', 'StrictHostKeyChecking=no', 'root@127.0.0.1', '-p', Port
            '-o', 'BatchMode=yes']
 if (os.environ.has_key('QEMU_USE_SSHPASS')):
     del baseSsh[-2:-1] # remove BatchMode
-#    del baseSsh[-1]
     baseSsh = sshPass + baseSsh
-print baseSsh
 
 kvmCmd = [
           'kvm', '-kernel', dir+image, '-net', 'nic',
