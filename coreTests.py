@@ -64,7 +64,7 @@ class coreTests(geniviTest.TestGeniviQemu):
     def untest_checkSystemCtlActive(self):
         # This test is not run
         # checks the number of active system services (is this too prescriptive?
-        op = check_output(baseSsh + ['systemctl', '|', 'grep', 'active', '|', 'grep', 'inactive']) #, '|', 'grep', '362'])
+        op = self.sendCommand(['systemctl', '|', 'grep', 'active', '|', 'grep', 'inactive']) #, '|', 'grep', '362'])
         #print "<", op, ">" hmm is it really const?
         self.assertEqual(int(op.split(None, 1)[0]), 362)
         # '362 loaded units listed. Pass --all to see loaded but inactive units, too.')
