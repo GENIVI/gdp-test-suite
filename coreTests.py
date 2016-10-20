@@ -61,13 +61,6 @@ class coreTests(geniviTest.TestGeniviQemu):
         self.assertEqual(op,"") # should have error'ed on the previous line
         self.pid = Popen(kvmCmd).pid
         
-    def untest_checkSystemCtlActive(self):
-        # This test is not run
-        # checks the number of active system services (is this too prescriptive?
-        op = self.sendCommand(['systemctl', '|', 'grep', 'active', '|', 'grep', 'inactive']) #, '|', 'grep', '362'])
-        #print "<", op, ">" hmm is it really const?
-        self.assertEqual(int(op.split(None, 1)[0]), 362)
-        # '362 loaded units listed. Pass --all to see loaded but inactive units, too.')
 
 if __name__ == '__main__': # Expected state & output, run test
     gensuite = unittest.TestLoader().loadTestsFromTestCase(coreTests)
