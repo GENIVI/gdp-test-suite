@@ -42,12 +42,6 @@ class coreTests(geniviTest.TestGeniviQemu):
         op = self.sendCommand(['/tmp/py2ex.py'])
         return True
     
-    def test_checkSystemCtl(self):
-        # check weston is running
-        op = self.sendCommand(['systemctl', 'is-active', 'weston'])
-        # assumes Linux style EOLs
-        self.assertEqual(op, 'active\n')
-
     # this test seems to run last so no need for a restart??
     # and a test to timeout because it is shutdown?
     # A failure is expected because the image should be shutdown

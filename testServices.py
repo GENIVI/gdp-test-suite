@@ -10,7 +10,6 @@
 
 # Acceptance test
 # Test to confirm that 362 services are running
-# Given that wayland was up and running
 # When getting into the shell as root 
 # And ask systemctl about the active services
 # The final grep inactive is to pull out the summary line
@@ -23,11 +22,13 @@
 
 import geniviTest 
 import unittest
+#import time
  
 class testServices(geniviTest.TestGeniviQemu):
     # test must be called test_<testName>
     def test_checkSystemCtlActive(self):
-        # checks the number of active system services (is this too prescriptive?
+        # checks the number of active system services (is this too prescriptive?)
+        # no of services drops to 361 after a time (pulseaudio stopping)
         op = self.sendCommand(['systemctl', '|', 'grep', 'active', '|', 'grep', 'inactive'])
         self.assertEqual(int(op.split(None, 1)[0]), 362)
         # '362 loaded units listed. Pass --all to see loaded but inactive units, too.')
