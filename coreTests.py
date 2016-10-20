@@ -57,5 +57,4 @@ class coreTests(geniviTest.TestGeniviQemu):
         
 
 if __name__ == '__main__': # Expected state & output, run test
-    gensuite = unittest.TestLoader().loadTestsFromTestCase(coreTests)
-    unittest.TextTestRunner(verbosity=2).run(gensuite)
+    print 'Use runAllTests.py or runOneTest.py instead!'
