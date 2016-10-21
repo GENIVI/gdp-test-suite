@@ -42,7 +42,7 @@ kvmCmd = [
           'kvm', '-kernel', dir+image, '-net', 'nic',
           '-net', 'user,hostfwd=tcp::'+Port+'-:22', # open port 5555 for ssh access
           '-cpu', 'core2duo',
-          '-hda', dir+fs, 
+          '-drive', 'file='+dir+fs+',media=disk,format=raw', 
           '-vga', 'std',  '-no-reboot', '-m', '512',
           '--append', 'vga=0 uvesafb.mode_option=640x480-32 root=/dev/hda rw mem=512M  oprofile.timer=1 -serial stdio'
           ]
