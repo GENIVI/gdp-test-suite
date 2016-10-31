@@ -91,7 +91,9 @@ class TestGeniviQemu(unittest.TestCase):
         op = check_output(baseSsh +cmd)
         return op
 
-
+    def checkOutput(self, cmd):
+        op = check_output(cmd,shell=True)
+        return op
     
 
 if __name__ == '__main__':
