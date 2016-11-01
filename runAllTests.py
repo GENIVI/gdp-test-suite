@@ -25,15 +25,17 @@ class gdpTestSuite(unittest.TestSuite):
 loader = unittest.TestLoader()
 suite  = gdpTestSuite()
 
-# assumes script is run the in the directory containing the tests
+# assumes script is run in the directory containing the tests
+# no it doesn't!
 if  (os.environ.has_key('QEMU_SCRIPT_DIR')):
     scriptDir = os.environ['QEMU_SCRIPT_DIR']
 else:    
     scriptDir = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 sys.path.append(scriptDir)
+sys.path.append(scriptDir+'/unitTests')
     
-test_file_strings = glob.glob(scriptDir + '/test*.py')
+test_file_strings = glob.glob(scriptDir + '/unitTests/test*.py')
 
 # Having found the scripts using globbing remove the full path and the .py suffix
 modulenames = [str[str.rfind('/')+1:len(str)-3] for str in test_file_strings]

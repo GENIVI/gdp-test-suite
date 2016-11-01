@@ -27,6 +27,12 @@ logging in as root - build with EXTRA_USERS_PARAMS = "", if you
 install sshpass you can test against images with passwords - set the
 environment variable QEMU_USER_SSHPASS to signal this - the password
 'root' is assumed.
+If you are using  QEMU_USER_SSHPASS you may need to run (as suggested when you get a
+   Permission denied (publickey,password).
+error)
+        ssh-keygen -f ~/.ssh/known_hosts -R [127.0.0.1]:5555
+in order to clear known_hosts of any previous build to which you have connected.
+sshpass cannot use BatchMode so this initial step is necessary.
 
 If you wish to boot the virtual machine with other options - for
 example it redirects the ssh port to 5555 - examine the preface to
