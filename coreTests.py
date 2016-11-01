@@ -25,11 +25,6 @@ class coreTests(geniviTest.TestGeniviQemu):
         #print '<', op, '>'
         self.assertEqual(int(op),1)
 
-    def test_checkQemu(self):
-        # looks for a qemux architecture in the dmesg output
-        op = self.sendCommand(['dmesg', '-t', '|', 'grep', 'qemux'])
-        self.assertEqual(op[0:-1],'systemd[1]: Set hostname to <'+self.arch+'>.') # trim EOL
-
 
     def test_checkPythonInstall(self):
         # op = self.sendCommand(['qml-example'])

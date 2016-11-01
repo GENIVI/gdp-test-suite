@@ -28,5 +28,6 @@ install sshpass you can test against images with passwords - set the
 environment variable QEMU_USER_SSHPASS to signal this - the password
 'root' is assumed.
 
-If you with to boot the virtual machine with other options - it
-redirects the ssh port to 5555 - examine the preface to geniviTest.py
+If you wish to boot the virtual machine with other options - for
+example it redirects the ssh port to 5555 - examine the preface to
+geniviTest.py
