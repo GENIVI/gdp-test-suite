@@ -1,0 +1,8 @@
+#!/bin/sh
+#cd /home/robertmarshall/devel/genivi-dev-platform/gdp-src-build/tmp/deploy/images/qemux86-64
+#HD=hddImg-ext4
+cd /home/robertmarshall/images/qemux86
+HD=genivi-dev-platform-qemux86.ext4
+# HD=hddImg-ext4
+# old
+kvm -kernel bzImage -net nic -net user,hostfwd=tcp::5555-:22 -cpu core2duo -hda $HD -vga vmware  -no-reboot -m 512 --append "vga=0 uvesafb.mode_option=640x480-32 root=/dev/hda rw mem=512M  oprofile.timer=1 -serial stdio"
