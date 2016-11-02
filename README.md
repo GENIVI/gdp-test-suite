@@ -1,8 +1,7 @@
 # genivi-testing
 Test scripts
 
-Scripts to enable the automatic testing of QEMU genivi images.
-They will eventually need integrating within the yocto/GENIVI system
+Scripts to enable the automatic acceptance testing of QEMU genivi images.
 
 There are 2 user invocable files runOneTest.py and runAllTests.py
 
