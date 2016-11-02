@@ -33,9 +33,9 @@ else:
     scriptDir = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 sys.path.append(scriptDir)
-sys.path.append(scriptDir+'/unitTests')
+sys.path.append(scriptDir+'/Tests')
     
-test_file_strings = glob.glob(scriptDir + '/unitTests/test*.py')
+test_file_strings = glob.glob(scriptDir + '/Tests/test*.py')
 
 # Having found the scripts using globbing remove the full path and the .py suffix
 modulenames = [str[str.rfind('/')+1:len(str)-3] for str in test_file_strings]

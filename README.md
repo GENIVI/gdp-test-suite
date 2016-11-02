@@ -6,12 +6,12 @@ Scripts to enable the automatic acceptance testing of QEMU genivi images.
 There are 2 user invocable files runOneTest.py and runAllTests.py
 
 runOneTest.py expects a test name to be supplied, currently only a python
-file (without the .py suffix), see the example files in unitTests as an indication
+file (without the .py suffix), see the example files in Tests as an indication
 of how to derive new ones. The class in each test file should inherit from geniviTest.TestGeniviQemu
 The test method must have a name with a test_ prefix. More than one test file can
-be supplied on the comment line
+be supplied on the command line
 
-runAllTests.py runs all the tests it finds in unitTests as well as a set of tests in coreTests.py
+runAllTests.py runs all the tests it finds in Tests as well as a set of tests in coreTests.py
 
 The infrastructure handles booting the QEMU image. It is assumed that
 the tests are run from the gdp-src-build directory though if you set

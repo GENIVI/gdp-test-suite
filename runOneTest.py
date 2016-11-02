@@ -11,7 +11,7 @@ import geniviTest
 if __name__ == '__main__': # run all tests specified on command line
     scriptDir = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-    sys.path.append(scriptDir+'/unitTests')
+    sys.path.append(scriptDir+'/Tests')
     loader = unittest.TestLoader()
     argv = sys.argv[1:]
     if argv == []:
@@ -23,7 +23,10 @@ if __name__ == '__main__': # run all tests specified on command line
             suite.addTests(loader.loadTestsFromName(arg))
         except ImportError:
             print ('*** test', arg, 'not found')
-            pass
+            # maybe it should check that  the .py is at the end of the argument
+            # but if it isn't the test loader will give other errors
+            if arg.find(".py") != -1:
+                print ('try removing .py suffix')
     testCount =  suite.countTestCases()
     print ('running', testCount, 'test', end="")
     if (testCount != 1):
