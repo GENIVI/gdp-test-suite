@@ -1,6 +1,8 @@
 # genivi-testing
 Test scripts
 
+(see README-pl.md for the old perl tests)
+
 Scripts to enable the automatic acceptance testing of QEMU genivi images.
 
 There are 2 user invocable files runOneTest.py and runAllTests.py
